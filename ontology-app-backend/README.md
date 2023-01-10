@@ -8,6 +8,7 @@ npm install
 ### Config database connection
 ```
 src/config/db.config.js
+```
 
 ### Compiles and hot-reloads for development
 ```
