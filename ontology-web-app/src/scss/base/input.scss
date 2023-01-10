@@ -1,0 +1,6 @@
+.input-wrapper {
+  
+  .v-combobox--single .v-field--dirty:not(.v-field--focused) input {
+      opacity: 1;
+  }
+}

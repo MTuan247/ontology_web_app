@@ -1,0 +1,29 @@
+@for $i from 0 through 12 {
+  .flex#{$i} {
+    flex: $i !important;
+  }
+
+  .pd#{$i} {
+    padding: (2px * $i) !important;
+  }
+
+  .pt#{$i} {
+    padding-top: (2px * $i) !important;
+  }
+
+  .pb#{$i} {
+    padding-bottom: (2px * $i) !important;
+  }
+
+  .mb#{$i} {
+    margin-bottom: (2px * $i) !important;
+  }
+
+  .mt#{$i} {
+    margin-top: (2px * $i) !important;
+  }
+
+  .ml#{$i} {
+    margin-left: (2px * $i) !important;
+  }
+}

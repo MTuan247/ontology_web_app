@@ -1,0 +1,115 @@
+
+/* grid CSS */
+.grid {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.grid::-webkit-scrollbar-track {
+  margin-top: 48px;
+}
+
+.grid table {
+  width: 100%;
+  table-layout: fixed;
+  overflow: auto;
+}
+
+.grid th,td {
+  border-bottom: 1px solid #dddddd;
+  height: 40px;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grid th {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.grid th:hover {
+  padding-bottom: 5px;
+}
+
+.grid td {
+  color: #222222;
+  font-family: GoogleSans-Light;
+}
+
+.grid .text-align-center {
+  text-align: center;
+}
+
+.grid .text-align-right {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.grid table tr.selected {
+  background-color: #2FBE8E;
+}
+
+.grid table tr.selected:hover {
+  background-color: #2FBE8E;
+}
+
+.grid table tr.selected td {
+  color: #fff;
+}
+
+.grid table tr.selected td:hover {
+  color: #fff;
+}
+
+.grid table tr:hover {
+  background-color: #EBF9F4;
+}
+
+.grid .check-box {
+  text-align: center;
+  position: relative;
+
+  input {
+    position: absolute;
+    top: 11px;
+    left: 14px;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.grid .custom-checkbox {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+
+  i {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    display: none;
+    color: #fff;
+  }
+}
+
+.grid .custom-checkbox--selected {
+  background-color: #01B075;
+  border: 0;
+}
+
+.grid .custom-checkbox--selected i {
+  display: block;
+}

@@ -1,0 +1,50 @@
+@import 'bootstrap/scss/bootstrap.scss';
+@import './common/_variables.scss';
+@import './common/common-style.scss';
+
+:root {
+  overflow: hidden;
+}
+
+body {
+  margin: 0px;
+  box-sizing: border-box;
+  height: 100vh;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-color);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  #main-app {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 0px;
+  }
+}
