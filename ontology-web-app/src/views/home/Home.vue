@@ -1,10 +1,19 @@
 <template>
   <div class="home">
     <div class="home-toolbar">
-      <div class="home-toolbar-left"></div>
+      <div class="home-toolbar-left">
+        <SearchTemplate />
+      </div>
       <div class="home-toolbar-right">
         <v-btn @click="add" class="toolbar-btn">Thêm</v-btn>
-        <v-btn @click="() => del(gridData.filter(x => x.isSelected).map(x => x.phone_id))" class="toolbar-btn">Xóa</v-btn>
+        <v-btn
+          @click="
+            () =>
+              del(gridData.filter((x) => x.isSelected).map((x) => x.phone_id))
+          "
+          class="toolbar-btn"
+          >Xóa</v-btn
+        >
       </div>
     </div>
     <div class="home-main">
@@ -22,33 +31,34 @@
 </template>
 
 <script>
-import BaseGridTable from "@/components/base/BaseGridTable.vue";
-import { ref } from "@vue/reactivity";
+import BaseGridTable from '@/components/base/BaseGridTable.vue';
+import SearchTemplate from '@/components/Search.vue';
+import { ref } from '@vue/reactivity';
 import { getCurrentInstance, onBeforeMount } from '@vue/runtime-core';
-import phoneApi from '@/js/api/phone/PhoneApi.js'
+import phoneApi from '@/js/api/phone/PhoneApi.js';
 
 export default {
-  name: "HomeView",
+  name: 'HomeView',
   components: {
     BaseGridTable,
+    SearchTemplate,
   },
   setup() {
     const { proxy } = getCurrentInstance();
 
     const gridData = ref([
       {
-        phone_id: "q",
-        phone_code: "A",
-        phone_name: "B",
-        phone_category: "C",
+        phone_id: 'q',
+        phone_code: 'A',
+        phone_name: 'B',
+        phone_category: 'C',
       },
     ]);
 
     const loadData = async () => {
       var res = await phoneApi.get();
       gridData.value = res.data;
-
-    }
+    };
 
     onBeforeMount(async () => {
       await loadData();
@@ -56,65 +66,73 @@ export default {
 
     const columns = ref([
       {
-        title: "",
-        fieldName: "Checkbox",
-        style: "width: 50px;",
+        title: '',
+        fieldName: 'Checkbox',
+        style: 'width: 50px;',
       },
       {
-        title: "#",
-        fieldName: "Index",
-        style: "width: 50px;",
+        title: '#',
+        fieldName: 'Index',
+        style: 'width: 50px;',
       },
       {
-        title: "Mã điện thoại",
-        fieldName: "phone_code",
-        style: "width: 120px;",
+        title: 'Mã điện thoại',
+        fieldName: 'phone_code',
+        style: 'width: 120px;',
       },
       {
-        title: "Tên điện thoại",
-        fieldName: "phone_name",
-        style: "width: 200px;",
+        title: 'Tên điện thoại',
+        fieldName: 'phone_name',
+        style: 'width: 200px;',
       },
       {
-        title: "Ngày phát hành",
-        fieldName: "anounced",
-        style: "width: 100px;",
+        title: 'Ngày phát hành',
+        fieldName: 'anounced',
+        style: 'width: 100px;',
       },
     ]);
 
     const editRow = (item) => {
       // proxy.$popup.show('PhoneDetail');
-      proxy.$popup.show({ component: 'PhoneDetail'}, {
-        data: item,
-        mode: 'edit',
-        afterSave: loadData
-      });
-    }
+      proxy.$popup.show(
+        { component: 'PhoneDetail' },
+        {
+          data: item,
+          mode: 'edit',
+          afterSave: loadData,
+        }
+      );
+    };
 
     const add = () => {
-      proxy.$popup.show({ component: 'PhoneDetail'}, {
-        data: {},
-        mode: 'add',
-        afterSave: loadData
-      });
-    }
+      proxy.$popup.show(
+        { component: 'PhoneDetail' },
+        {
+          data: {},
+          mode: 'add',
+          afterSave: loadData,
+        }
+      );
+    };
 
     const del = (phoneId) => {
-      phoneApi.delete({
-        Condition: {
-          phone_id: phoneId,
-        }
-      }).then(() => {
-        loadData();
-      });
-    }
+      phoneApi
+        .delete({
+          Condition: {
+            phone_id: phoneId,
+          },
+        })
+        .then(() => {
+          loadData();
+        });
+    };
 
     return {
       columns,
       gridData,
       editRow,
       add,
-      del
+      del,
     };
   },
 };
