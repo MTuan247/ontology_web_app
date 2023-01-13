@@ -60,11 +60,13 @@
               ></base-input>
             </v-row>
             <v-row>
-              <base-input
+              <base-combobox
                 label="Build"
                 v-model="model.build"
+                multiple
+                chips
                 class="form-input"
-              ></base-input>
+              ></base-combobox>
               <base-input
                 label="SIM"
                 v-model="model.sim"
@@ -76,11 +78,12 @@
         <phone-form-group title="Display">
           <v-col>
             <v-row class="mb-10">
-              <base-input
+              <base-autocomplete
                 v-model="model.type"
                 label="Type"
                 class="form-input"
-              ></base-input>
+                :items="['LCD', 'LED']"
+              ></base-autocomplete>
               <base-input
                 v-model="model.size"
                 label="Size"
@@ -104,16 +107,18 @@
         <phone-form-group title="Platform">
           <v-col>
             <v-row class="mb-10">
-              <base-input
+              <base-autocomplete
                 v-model="model.os"
                 label="OS"
                 class="form-input"
-              ></base-input>
-              <base-input
+                :items="['IOS', 'Android']"
+              ></base-autocomplete>
+              <base-autocomplete
                 v-model="model.chipset"
                 label="Chipset"
                 class="form-input"
-              ></base-input>
+                :items="['A10Fusion']"
+              ></base-autocomplete>
             </v-row>
             <v-row>
               <base-input
@@ -135,36 +140,74 @@
             class="form-input flex1"
             v-model="model.card_slot"
           ></base-checkbox>
-          <base-input v-model="model.memory_internal" label="Internal" class="form-input flex1"></base-input>
+          <base-combobox
+            :multiple="true"
+            chips
+            v-model="model.memory_internal"
+            label="Internal"
+            class="form-input flex1"
+          ></base-combobox>
         </phone-form-group>
         <phone-form-group title="Main camera">
           <v-col>
             <v-row class="mb-10">
-              <base-input v-model="model.main_camera_triple" label="Triple" class="form-input"></base-input>
+              <base-input
+                v-model="model.main_camera_triple"
+                label="Triple"
+                class="form-input"
+              ></base-input>
             </v-row>
             <v-row>
-              <base-input
+              <base-combobox
+                :multiple="true"
+                chips
                 label="Features"
                 class="form-input flex1"
                 v-model="model.main_camera_features"
-              ></base-input>
-              <base-input v-model="model.main_camera_video" label="Video" class="form-input flex1"></base-input>
+              ></base-combobox>
+              <base-combobox
+                :multiple="true"
+                chips
+                v-model="model.main_camera_video"
+                label="Video"
+                class="form-input flex1"
+              ></base-combobox>
             </v-row>
           </v-col>
         </phone-form-group>
         <phone-form-group title="Selfie camera">
           <v-col>
             <v-row class="mb-10">
-              <base-input v-model="model.selfie_single" label="Single" class="form-input"></base-input>
+              <base-input
+                v-model="model.selfie_single"
+                label="Single"
+                class="form-input"
+              ></base-input>
             </v-row>
             <v-row>
-              <base-input v-model="model.selfie_features" label="Features" class="form-input"></base-input>
-              <base-input v-model="model.selfie_video" label="Video" class="form-input"></base-input>
+              <base-combobox
+                :multiple="true"
+                chips
+                v-model="model.selfie_features"
+                label="Features"
+                class="form-input"
+              ></base-combobox>
+              <base-combobox
+                :multiple="true"
+                chips
+                v-model="model.selfie_video"
+                label="Video"
+                class="form-input"
+              ></base-combobox>
             </v-row>
           </v-col>
         </phone-form-group>
         <phone-form-group title="Sound">
-          <base-input v-model="model.loud_speaker" label="Loudspeaker" class="form-input flex1"></base-input>
+          <base-input
+            v-model="model.loud_speaker"
+            label="Loudspeaker"
+            class="form-input flex1"
+          ></base-input>
           <base-checkbox
             label="3.5mm jack"
             class="form-input flex1"
@@ -174,11 +217,23 @@
         <phone-form-group title="Comms">
           <v-col>
             <v-row class="mb-10">
-              <base-input v-model="model.wlan" label="Wlan" class="form-input"></base-input>
+              <base-input
+                v-model="model.wlan"
+                label="Wlan"
+                class="form-input"
+              ></base-input>
             </v-row>
             <v-row class="mb-10">
-              <base-input v-model="model.bluetooth" label="Bluetooth" class="form-input"></base-input>
-              <base-input v-model="model.position" label="Position" class="form-input"></base-input>
+              <base-input
+                v-model="model.bluetooth"
+                label="Bluetooth"
+                class="form-input"
+              ></base-input>
+              <base-input
+                v-model="model.position"
+                label="Position"
+                class="form-input"
+              ></base-input>
             </v-row>
             <v-row>
               <base-checkbox
@@ -195,15 +250,35 @@
           </v-col>
         </phone-form-group>
         <phone-form-group title="Features">
-          <base-input label="Sensors" v-model="model.sensors" class="form-input"></base-input>
+          <base-input
+            label="Sensors"
+            v-model="model.sensors"
+            class="form-input"
+          ></base-input>
         </phone-form-group>
         <phone-form-group title="Battery">
-          <base-input v-model="model.battery_type" label="Type" class="form-input"></base-input>
-          <base-input v-model="model.battery_charging" label="Charging" class="form-input"></base-input>
+          <base-input
+            v-model="model.battery_type"
+            label="Type"
+            class="form-input"
+          ></base-input>
+          <base-input
+            v-model="model.battery_charging"
+            label="Charging"
+            class="form-input"
+          ></base-input>
         </phone-form-group>
         <phone-form-group title="Misc">
-          <base-input v-model="model.colors" label="Colors" class="form-input"></base-input>
-          <base-input v-model="model.price" label="Price" class="form-input"></base-input>
+          <base-input
+            v-model="model.colors"
+            label="Colors"
+            class="form-input"
+          ></base-input>
+          <base-input
+            v-model="model.price"
+            label="Price"
+            class="form-input"
+          ></base-input>
         </phone-form-group>
       </v-col>
     </div>
@@ -217,7 +292,11 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, ref } from "@vue/runtime-core";
+import {
+  getCurrentInstance,
+  onMounted,
+  ref,
+} from "@vue/runtime-core";
 import PhoneFormGroup from "./PhoneFormGroup.vue";
 import phoneApi from "@/js/api/phone/PhoneApi.js";
 
@@ -237,7 +316,7 @@ export default {
     const params = ref();
 
     const beforeOpen = (event) => {
-      model.value = {...event.ref.params.value.data};
+      model.value = { ...event.ref.params.value.data };
       mode.value = event.ref.params.value.mode;
       params.value = event.ref.params.value;
     };
@@ -258,8 +337,8 @@ export default {
           res = await phoneApi.put({
             Model: model.value,
             Condition: {
-              phone_id: model.value.phone_id
-            }
+              phone_id: model.value.phone_id,
+            },
           });
           break;
       }
