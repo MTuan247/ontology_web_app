@@ -11,6 +11,8 @@
 import TheHeader from '@/components/layout/TheHeader'
 import TheContent from '@/components/layout/TheContent.vue'
 import { getCurrentInstance, onMounted } from '@vue/runtime-core'
+import 'ant-design-vue/dist/antd.css'; 
+
 export default {
   name: 'App',
   components: {
