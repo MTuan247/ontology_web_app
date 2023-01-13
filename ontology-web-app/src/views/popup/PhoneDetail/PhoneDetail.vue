@@ -11,65 +11,61 @@
     @before-open="beforeOpen"
   >
     <button class="modal__close" @click="close">X</button>
-    <span class="modal__title">Chi tiết điện thoại</span>
+    <span class="modal__title">Mobile Phone Information</span>
     <div class="modal__content">
       <v-col class="form-col">
-        <phone-form-group title="Thông tin chung">
-          <base-input
+        <phone-form-group title="General">
+          <!-- <base-input
             label="Mã điện thoại"
             class="form-input flex1"
-            v-model="model.phone_code"
-          ></base-input>
+            v-model="model.phoneCode"
+          ></base-input> -->
           <base-input
-            label="Tên điện thoại"
+            label="Name *"
             class="form-input flex2"
-            v-model="model.phone_name"
+            v-model="model.name"
           ></base-input>
         </phone-form-group>
-        <phone-form-group title="Network">
-          <base-input
-            label="Network Technology"
-            class="form-input"
-            v-model="model.network_technology"
-          ></base-input>
-        </phone-form-group>
+        <!-- <phone-form-group title="Network">
+        </phone-form-group> -->
         <phone-form-group title="Launch">
           <base-input
-            label="Anounced"
-            v-model="model.anounced"
+            label="PublishDate"
+            v-model="model.publishDate"
             class="form-input flex1"
           ></base-input>
-          <base-input
+          <base-autocomplete
             label="Status"
             v-model="model.status"
             class="form-input flex1"
-          ></base-input>
+            :items="['discontinued']"
+          ></base-autocomplete>
         </phone-form-group>
         <phone-form-group title="Body">
           <v-col>
             <v-row class="mb-10">
               <base-input
                 label="Dimensions"
-                v-model="model.dimensions"
+                v-model="model.bodyDimensions"
                 class="form-input"
               ></base-input>
               <base-input
                 label="Weight"
-                v-model="model.weight"
+                v-model="model.bodyWeight"
                 class="form-input"
               ></base-input>
             </v-row>
             <v-row>
               <base-combobox
                 label="Build"
-                v-model="model.build"
+                v-model="model.bodyBuild"
                 multiple
                 chips
                 class="form-input"
               ></base-combobox>
               <base-input
                 label="SIM"
-                v-model="model.sim"
+                v-model="model.SIM"
                 class="form-input"
               ></base-input>
             </v-row>
@@ -79,25 +75,20 @@
           <v-col>
             <v-row class="mb-10">
               <base-autocomplete
-                v-model="model.type"
+                v-model="model.displayType"
                 label="Type"
                 class="form-input"
                 :items="['LCD', 'LED']"
               ></base-autocomplete>
               <base-input
-                v-model="model.size"
-                label="Size"
+                v-model="model.displayDimensions"
+                label="Dimensions"
                 class="form-input"
               ></base-input>
             </v-row>
             <v-row>
               <base-input
-                v-model="model.resolution"
-                label="Resolution"
-                class="form-input"
-              ></base-input>
-              <base-input
-                v-model="model.protection"
+                v-model="model.displayProtection"
                 label="Protection"
                 class="form-input"
               ></base-input>
@@ -108,7 +99,7 @@
           <v-col>
             <v-row class="mb-10">
               <base-autocomplete
-                v-model="model.os"
+                v-model="model.operatingSystem"
                 label="OS"
                 class="form-input"
                 :items="['IOS', 'Android']"
@@ -122,15 +113,15 @@
             </v-row>
             <v-row>
               <base-input
-                v-model="model.cpu"
+                v-model="model.CPU"
                 label="CPU"
                 class="form-input"
               ></base-input>
-              <base-input
+              <!-- <base-input
                 v-model="model.gpu"
                 label="GPU"
                 class="form-input"
-              ></base-input>
+              ></base-input> -->
             </v-row>
           </v-col>
         </phone-form-group>
@@ -138,12 +129,17 @@
           <base-checkbox
             label="Card slot"
             class="form-input flex1"
-            v-model="model.card_slot"
+            v-model="model.cardSlot"
+          ></base-checkbox>
+          <base-checkbox
+            label="Ram"
+            class="form-input flex1"
+            v-model="model.ramMemory"
           ></base-checkbox>
           <base-combobox
             :multiple="true"
             chips
-            v-model="model.memory_internal"
+            v-model="model.internalMemory"
             label="Internal"
             class="form-input flex1"
           ></base-combobox>
@@ -152,8 +148,8 @@
           <v-col>
             <v-row class="mb-10">
               <base-input
-                v-model="model.main_camera_triple"
-                label="Triple"
+                v-model="model.mainCameraResolution"
+                label="Resolution"
                 class="form-input"
               ></base-input>
             </v-row>
@@ -163,12 +159,12 @@
                 chips
                 label="Features"
                 class="form-input flex1"
-                v-model="model.main_camera_features"
+                v-model="model.mainCameraFeatures"
               ></base-combobox>
               <base-combobox
                 :multiple="true"
                 chips
-                v-model="model.main_camera_video"
+                v-model="model.mainCameraVideo"
                 label="Video"
                 class="form-input flex1"
               ></base-combobox>
@@ -179,8 +175,8 @@
           <v-col>
             <v-row class="mb-10">
               <base-input
-                v-model="model.selfie_single"
-                label="Single"
+                v-model="model.selfieCameraResolution"
+                label="Resolution"
                 class="form-input"
               ></base-input>
             </v-row>
@@ -188,21 +184,21 @@
               <base-combobox
                 :multiple="true"
                 chips
-                v-model="model.selfie_features"
+                v-model="model.selfieCameraFeatures"
                 label="Features"
                 class="form-input"
               ></base-combobox>
               <base-combobox
                 :multiple="true"
                 chips
-                v-model="model.selfie_video"
+                v-model="model.selfieCameraVideo"
                 label="Video"
                 class="form-input"
               ></base-combobox>
             </v-row>
           </v-col>
         </phone-form-group>
-        <phone-form-group title="Sound">
+        <!-- <phone-form-group title="Sound">
           <base-input
             v-model="model.loud_speaker"
             label="Loudspeaker"
@@ -279,7 +275,7 @@
             label="Price"
             class="form-input"
           ></base-input>
-        </phone-form-group>
+        </phone-form-group> -->
       </v-col>
     </div>
     <div class="modal__footer pt4 pb4">
@@ -298,7 +294,9 @@ import {
   ref,
 } from "@vue/runtime-core";
 import PhoneFormGroup from "./PhoneFormGroup.vue";
-import phoneApi from "@/js/api/phone/PhoneApi.js";
+// import phoneApi from "@/js/api/phone/PhoneApi.js";
+
+import { useOntology } from '@/js/common/ontology'
 
 export default {
   name: "PhoneDetail",
@@ -325,29 +323,34 @@ export default {
       console.log("PhoneDetail");
     });
 
+    const {generateCode} = useOntology(proxy);
+
     const save = async () => {
-      let res = {};
-      switch (proxy.mode) {
-        case "add":
-          res = await phoneApi.post({
-            Model: model.value,
-          });
-          break;
-        case "edit":
-          res = await phoneApi.put({
-            Model: model.value,
-            Condition: {
-              phone_id: model.value.phone_id,
-            },
-          });
-          break;
-      }
-      if (res.data) {
-        if (typeof proxy.params.afterSave == "function") {
-          proxy.params.afterSave();
-        }
-        show.value = false;
-      }
+      
+      console.log(generateCode(model.value))
+
+      // let res = {};
+      // switch (proxy.mode) {
+      //   case "add":
+      //     res = await phoneApi.post({
+      //       Model: model.value,
+      //     });
+      //     break;
+      //   case "edit":
+      //     res = await phoneApi.put({
+      //       Model: model.value,
+      //       Condition: {
+      //         phone_id: model.value.phone_id,
+      //       },
+      //     });
+      //     break;
+      // }
+      // if (res.data) {
+      //   if (typeof proxy.params.afterSave == "function") {
+      //     proxy.params.afterSave();
+      //   }
+      //   show.value = false;
+      // }
     };
 
     return {
