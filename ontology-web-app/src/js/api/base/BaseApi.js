@@ -3,7 +3,7 @@ import axios from 'axios'
 export default class BaseAPI {
 
   constructor() {
-    this.host = "http://localhost:5678";
+    this.host = "http://172.20.10.10:3030";
     this.api = "/";
   }
 

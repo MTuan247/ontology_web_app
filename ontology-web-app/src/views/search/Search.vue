@@ -4,19 +4,28 @@
       <a-col class="keyword">
         Kết quả tìm kiếm cho: {{ searchKey }}
       </a-col>
-      <a-col>
-        <SearchTemplate />
-      </a-col>
     </a-row>
 
-     <a-table class="mt-12" :columns="columns" :row-key="record => record.key" :data-source="data">
-      <!-- <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'name'">
-          <a>
-            {{ record.name }}
-          </a>
+     <a-table class="mt-12" :columns="columns" :row-key="record => record.key" :data-source="data" :loading="isLoading">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 's'">
+          <div @click="loadData(record?.['s']?.type == 'uri' && record['s'].value)" :class="`${record?.['s']?.type == 'uri' && 'link'}`">
+            {{  record?.['s']?.type == 'uri' ? record['s'].value.split("#")[1] : record?.['s']?.value }}
+          </div>
         </template>
-      </template> -->
+
+        <template v-if="column.key === 'p'">
+          <div @click="loadData(record?.['p']?.type == 'uri' && record['p'].value)" :class="`${record?.['p']?.type == 'uri' && 'link'}`">
+            {{  record?.['p']?.type == 'uri' ? record['p'].value.split("#")[1] : record?.['p']?.value }}
+          </div>
+        </template>
+
+        <template v-if="column.key === 'o'">
+          <div @click="loadData(record?.['o']?.type == 'uri' && record['o'].value)" :class="`${record?.['o']?.type == 'uri' && 'link'}`">
+            {{  record?.['o']?.type == 'uri' ? record['o'].value.split("#")[1] : record?.['o']?.value }}
+          </div>
+        </template>
+      </template>
     </a-table>
   </div>
 </template>
@@ -25,85 +34,121 @@
 import { onBeforeMount } from '@vue/runtime-core';
 import {  watch } from 'vue';
 import phoneApi from '@/js/api/phone/PhoneApi.js';
-import SearchTemplate from '@/components/Search.vue';
+// import SearchTemplate from '@/components/Search.vue';
 import { ref } from '@vue/reactivity';
 import { useRoute } from 'vue-router';
 
 const columns = [
   {
-    title: 'EX: S',
+    title: 'S',
     dataIndex: 's',
     key: 's',
   },
   {
-    title: 'EX: P',
+    title: 'P',
     dataIndex: 'p',
     key: 'p',
     responsive: ['md'],
   },
   {
-    title: 'EX: O',
+    title: 'O',
     dataIndex: 'o',
     key: 'o',
     responsive: ['lg'],
   },
 ];
 
-const data = [
-  {
-    key: '1',
-    s: 'IPhone 7',
-    o: 'OP',
-    p: 'OS',
-  },
-  {
-    key: '2',
-    s: 'IPhone 12',
-    o: 'OP',
-    p: 'OS',
-  },
-  {
-    key: '3',
-    s: 'IPhone 1',
-    o: 'OP',
-    p: 'OS',
-  },
-  {
-    key: '4',
-    s: 'IPhone 2',
-    o: 'OP',
-    p: 'OS',
-  },
-];
+// const data = [
+//   {
+//     key: '1',
+//     s: 'IPhone 7',
+//     o: 'OP',
+//     p: 'OS',
+//   },
+//   {
+//     key: '2',
+//     s: 'IPhone 12',
+//     o: 'OP',
+//     p: 'OS',
+//   },
+//   {
+//     key: '3',
+//     s: 'IPhone 1',
+//     o: 'OP',
+//     p: 'OS',
+//   },
+//   {
+//     key: '4',
+//     s: 'IPhone 2',
+//     o: 'OP',
+//     p: 'OS',
+//   },
+// ];
+
+const queryMobile = `PREFIX ex: <http://semweb.edu.vn/example#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+select *
+where {?s rdfs:subClassOf ex:mobilePhone}`
 
 export default {
   name: 'SearchView',
   components: {
-    SearchTemplate,
+    // SearchTemplate,
   },
   setup() {
     const route = useRoute();
-    const loadData = async () => {
-      var res = await phoneApi.get();
-      return res;
+    const searchKey = ref(route.query.keyword);
+    const data = ref([]);
+    const isLoading = ref(true);
+    
+
+    const formatUri = (uri) => {
+      return (
+        `PREFIX ex: <http://semweb.edu.vn/example#>
+          PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+          select *
+          where {?s ?p ?o .
+          filter (?s = <${uri}> || ?o = <${uri}> || ?p = <${uri}>) .
+        }`
+      )
+    }
+    const loadData = async (currentURI) => {
+      isLoading.value = true;
+      const formData = new FormData();
+      formData.append('query', queryMobile);
+      try {
+        const res = await phoneApi.searchPhone({
+          query: currentURI ? formatUri(currentURI) : queryMobile,
+        });
+        data.value = res.data.results.bindings;
+        searchKey.value = currentURI.split("#")[1];
+      } catch (error) {
+        console.log(error);
+      }
+
+      isLoading.value = false
     };
 
-    const searchKey = ref(route.query.keyword);
-
     onBeforeMount(async () => {
-      await loadData();
+      loadData();
     });
     
-     watch(() => route.query.keyword, () => {
-        console.log(route.query.keyword);
-        searchKey.value = route.query.keyword
-      });
-
+    watch(() => route.query.keyword, () => {
+      console.log(route.query.keyword);
+      searchKey.value = route.query.keyword
+    });
+    
     return {
       searchKey,
       route,
       columns,
       data,
+      loadData,
+      isLoading,
     };
   },
 };
@@ -122,5 +167,10 @@ export default {
 }
 .mt-12 {
   margin-top: 12;
+}
+.link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
