@@ -1,8 +1,10 @@
 <template>
   <div id="main-app">
-    <modals-container></modals-container>
-    <TheHeader />
-    <TheContent />
+    <div class="container">
+      <modals-container></modals-container>
+      <TheHeader />
+      <TheContent />
+    </div>
   </div>
 </template>
 

@@ -5,9 +5,6 @@
         <div class="logo-site h-100">
         </div>
       </div>
-      <div class="header-center">
-        <router-link to="/" class="header-item">Trang chủ</router-link>
-      </div>
       <div class="header-right"></div>
     </div>
   </div>
