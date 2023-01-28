@@ -1,9 +1,7 @@
 <template>
   <div class="search-container">
     <a-row justify="space-between" align="center">
-      <a-col class="keyword">
-        Kết quả tìm kiếm cho: {{ searchKey }}
-      </a-col>
+      <SearchTemplate />
     </a-row>
 
      <a-table class="mt-12" :columns="columns" :row-key="record => record.key" :data-source="data" :loading="isLoading">
@@ -37,6 +35,7 @@ import phoneApi from '@/js/api/phone/PhoneApi.js';
 // import SearchTemplate from '@/components/Search.vue';
 import { ref } from '@vue/reactivity';
 import { useRoute } from 'vue-router';
+import SearchTemplate from '@/components/Search.vue';
 
 const columns = [
   {
@@ -58,33 +57,6 @@ const columns = [
   },
 ];
 
-// const data = [
-//   {
-//     key: '1',
-//     s: 'IPhone 7',
-//     o: 'OP',
-//     p: 'OS',
-//   },
-//   {
-//     key: '2',
-//     s: 'IPhone 12',
-//     o: 'OP',
-//     p: 'OS',
-//   },
-//   {
-//     key: '3',
-//     s: 'IPhone 1',
-//     o: 'OP',
-//     p: 'OS',
-//   },
-//   {
-//     key: '4',
-//     s: 'IPhone 2',
-//     o: 'OP',
-//     p: 'OS',
-//   },
-// ];
-
 const queryMobile = `PREFIX ex: <http://semweb.edu.vn/example#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -95,11 +67,15 @@ where {?s rdfs:subClassOf ex:mobilePhone}`
 export default {
   name: 'SearchView',
   components: {
-    // SearchTemplate,
+    SearchTemplate,
   },
   setup() {
     const route = useRoute();
     const searchKey = ref(route.query.keyword);
+    const phoneType = ref(route.query.phoneType);
+    const phonePriceFrom = ref(route.query.phonePriceFrom);
+    const phonePriceTo = ref(route.query.phonePriceTo);
+
     const data = ref([]);
     const isLoading = ref(true);
     
@@ -137,9 +113,11 @@ export default {
       loadData();
     });
     
-    watch(() => route.query.keyword, () => {
-      console.log(route.query.keyword);
-      searchKey.value = route.query.keyword
+    watch(() => route.query, () => {
+      searchKey.value = route.query.keyword;
+      phoneType.value = route.query.phoneType;
+      phonePriceFrom.value = route.query.phonePriceFrom;
+      phonePriceTo.value = route.query.phonePriceTo;
     });
     
     return {
