@@ -1,0 +1,307 @@
+{
+  "head": {
+    "vars": [
+      "phone",
+      "label",
+      "imgUri"
+    ]
+  },
+  "results": {
+    "bindings": [
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-7-plus"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 7 plus"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-7-plus-r2.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-14-pro-max"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 14 Pro max"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro-max-.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-14"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 14"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-14-pro"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 14 pro"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-13-pro-max"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 13 pro max"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-13"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 13"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-13-pro"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 13 pro"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-12-pro-max"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 12 pro max"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-12"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 12"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-12-pro"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 12 pro"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#iphone-8"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Iphone 8"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#samsung-galaxy-a14-5g"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Samsung Galaxy A14 5G"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#samsung-galaxy-f04"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Samsung Galaxy F04"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#samsung-galaxy-m04"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Samsung Galaxy M04"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#samsung-galaxy-s22-ultra-5G"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Samsung Galaxy S22 Ultra 5G"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#oppo-a78"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Oppo A78"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#oppo-reno8-pro"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Oppo Reno8 Pro"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#xiaomi-redmi-note-12"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Xiaomi Redmi Note 12"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#xiaomi-poco-c50"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Xiaomi Poco C50"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#realme-10-pro"
+        },
+        "label": {
+          "type": "literal",
+          "value": "Realme 10 Pro"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      },
+      {
+        "phone": {
+          "type": "uri",
+          "value": "http://semweb.edu.vn/example#vivo-Y22"
+        },
+        "label": {
+          "type": "literal",
+          "value": "vivo Y22"
+        },
+        "imgUri": {
+          "type": "uri",
+          "value": "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-14-pro.jpg"
+        }
+      }
+    ]
+  }
+}
