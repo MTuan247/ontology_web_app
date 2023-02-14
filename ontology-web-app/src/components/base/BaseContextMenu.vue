@@ -62,7 +62,6 @@
     z-index: 9999;
     border-radius: 4px;
     box-shadow: 2px 2px 5px #888888;
-    overflow: hidden;
 }
 .context-menu .context-menu__item {
     height: 40px;
