@@ -78,9 +78,9 @@ export const useOntology = () => {
   }
 
   const generateCode = (model) => {
-    let result = `@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix ex: <http://semweb.edu.vn/example#> .`
+    let result = `PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n
+    PREFIX ex: <http://semweb.edu.vn/example#>\n`
 
     let arrRs = [];
 
@@ -90,13 +90,13 @@ export const useOntology = () => {
 
     for (let key in codeConfig) {
       let keyValue = codeConfig[key];
-      if (model[key] == undefined || model[key] == null) {
+      if (!(key == "key" || key == "subClassOf") && (model[key] == undefined || model[key] == null)) {
         continue;
       }
 
       switch (keyValue.type) {
         case 'key':
-          arrRs.push(prefix + model[keyValue.field.toLowerCase().replaceAll(' ', '-')] + ' a rdf:Class ; \n');
+          arrRs.push(prefix + model[keyValue.field].toLowerCase().replaceAll(' ', '-') + ' a rdf:Class ; \n');
           break;
         case 'subClassOf':
           arrRs.push('rdfs:subClassOf ' + prefix + keyValue.value + ' ;\n');
@@ -128,7 +128,7 @@ export const useOntology = () => {
       }
     }
 
-    result += arrRs.join('');
+    result += `INSERT DATA { ${arrRs.join('').slice(0, -2)}. }`;
 
     return result
   }

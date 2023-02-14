@@ -1,25 +1,28 @@
 <template>
   <a-row :gutter="[16, 16]">
     <a-col
-      ><a-input v-model:value="keyword"  style="width: 200px" placeholder="Tìm kiếm ..."
+      ><a-input v-model:value="keyword"  style="width: 250px" placeholder="Nhập từ khóa để tìm kiếm điện thoại..."
     /></a-col>
     <a-col>
-      <a-button @click="search">Tìm Kiếm</a-button>
+      <a-button @click="search" class="btn btn-primary">Tìm kiếm</a-button>
     </a-col>
   </a-row>
-
-  <a-auto-complete
+  <a-row :gutter="[16, 16]" style="align-items: center; margin-left: 20px;">
+    <a-col>Hãng điện thoại</a-col>
+    <a-auto-complete
     v-model:value="phoneType"
     :options="phoneTypes"
     style="width: 200px"
-    placeholder="Hãng Điện Thoại"
+    placeholder="Tất cả"
     @change="search"
-  />
+    />
+  </a-row>
+  
 
-  <div>
+  <!-- <div>
     <a-slider @change="search" range :tip-formatter="formatter" :min=100000 :max=20000000 :step=100000 v-model:value="phonePrice" />
     Giá từ <b>{{ formatter(phonePrice[0]) }}</b> đến <b>{{ formatter(phonePrice[1]) }}</b>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -33,21 +36,22 @@ export default {
   setup() {
     const keyword = ref('');
     const phoneType = ref('');
-    const phonePrice = ref([100000, 20000000]);
+    const phonePrice = ref([500000, 30000000]);
 
     const search = () => {
       router.push({ path: '/', query: {
           keyword: keyword.value,
           phoneType: phoneType.value,
-          phonePriceFrom: phonePrice.value[0],
-          phonePriceTo: phonePrice.value[1],
+          // phonePriceFrom: phonePrice.value[0],
+          // phonePriceTo: phonePrice.value[1],
       }})
     };
 
     const phoneTypes = ref([
+      { value: 'Apple' },
       { value: 'Samsung' },
       { value: 'Xiaomi' },
-      { value: 'Iphone' },
+      { value: 'realme' }
     ]);
   
     const formatter = (value) => {
@@ -65,3 +69,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import '@/scss/base/button.scss';
+</style>

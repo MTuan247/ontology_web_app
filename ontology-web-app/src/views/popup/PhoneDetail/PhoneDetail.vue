@@ -1,6 +1,5 @@
 <template>
   <vue-final-modal
-    v-slot="{ close }"
     v-bind="$attrs"
     classes="modal-container"
     content-class="modal-content phone-detail"
@@ -294,7 +293,7 @@ import {
   ref,
 } from "@vue/runtime-core";
 import PhoneFormGroup from "./PhoneFormGroup.vue";
-// import phoneApi from "@/js/api/phone/PhoneApi.js";
+import phoneApi from "@/js/api/phone/PhoneApi.js";
 
 import { useOntology } from '@/js/common/ontology'
 
@@ -351,7 +350,21 @@ export default {
       //   }
       //   show.value = false;
       // }
+      try {
+        const res = await phoneApi.insertPhone({
+          update: generateCode(model.value),
+        });
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+
+      show.value = false;
     };
+
+    const close = () => {
+      show.value = false;
+    }
 
     return {
       show,
@@ -360,6 +373,7 @@ export default {
       params,
       beforeOpen,
       model,
+      close
     };
   },
 };

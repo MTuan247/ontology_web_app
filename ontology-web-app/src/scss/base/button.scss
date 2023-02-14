@@ -1,0 +1,13 @@
+.btn {
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  border: none;
+}
+.btn-primary {
+  background-color: #198754;
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: #157347;
+}
