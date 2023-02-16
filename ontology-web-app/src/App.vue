@@ -2,7 +2,7 @@
   <div id="main-app">
     <div class="container">
       <modals-container></modals-container>
-      <TheHeader />
+      <!-- <TheHeader /> -->
       <TheContent />
     </div>
   </div>
@@ -10,7 +10,7 @@
 
 <script>
 
-import TheHeader from '@/components/layout/TheHeader'
+// import TheHeader from '@/components/layout/TheHeader'
 import TheContent from '@/components/layout/TheContent.vue'
 import { getCurrentInstance, onMounted } from '@vue/runtime-core'
 import 'ant-design-vue/dist/antd.css'; 
@@ -18,7 +18,7 @@ import 'ant-design-vue/dist/antd.css';
 export default {
   name: 'App',
   components: {
-    TheHeader,
+    // TheHeader,
     TheContent
   },
   setup() {
