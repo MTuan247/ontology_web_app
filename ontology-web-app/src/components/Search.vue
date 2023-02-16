@@ -33,9 +33,10 @@ import { router } from '@/plugins/router.js';
 export default {
   name: 'SearchTemplate',
   components: {},
-  setup() {
-    const keyword = ref('');
-    const phoneType = ref('');
+  props: ['searchKey', 'currentPhoneType'],
+  setup(props) {
+    const keyword = ref(props.searchKey);
+    const phoneType = ref(props.currentPhoneType);
     const phonePrice = ref([500000, 30000000]);
 
     const search = () => {

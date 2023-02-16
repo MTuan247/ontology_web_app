@@ -1,11 +1,12 @@
 <template>
   <div class="search-container">
     <a-row style="align-items: center; justify-content: flex-start;">
-      <SearchTemplate />
+      <SearchTemplate :searchKey="searchKey" :currentPhoneType="phoneType"/>
       <div style="flex: 1;"></div>
     </a-row>
 
-    <a-spin v-if="isLoading" tip="Loading..." size="large"/>
+    <div v-show="isLoading" class="loading-bg"></div>
+    <a-spin v-if="isLoading" class="loading-wrapper" tip="Loading..." size="large"/>
     <a-row v-else class="mt-8" :gutter="[60,48]">
       <a-col :span="4" v-for="phone in data" :key="phone.phone.value" @click="navigateDetailRoute(phone.label.value)">
         <a-card hoverable style="width: 100%">
@@ -234,6 +235,7 @@ export default {
     
     return {
       searchKey,
+      phoneType,
       route,
       columns,
       data,
@@ -280,5 +282,23 @@ export default {
 
 .ant-card-meta-title {
   font-size: 13px;
+}
+
+.loading-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 </style>

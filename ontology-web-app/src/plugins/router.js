@@ -11,7 +11,7 @@ import Detail from '@/views/detail/Detail.vue'
 // Each route should map to a component.
 // We'll talk about nested routes later.
 const routes = [
-  { name: 'home', path: '/search', component: Search },
+  { name: 'home', path: '/link', component: Search },
   { name: 'detail', path: '/detail', component: Detail },
   { name: 'search', path: '/', component: Search2 },
 ]
