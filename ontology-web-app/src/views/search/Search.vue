@@ -5,7 +5,7 @@
       <SearchTemplate />
       <div style="flex: 1;"></div>
       <a-col>
-        <a-button @click="showPopup" class="btn btn-primary">Thêm mới</a-button>
+        <a-button @click="showPopup" class="ms-btn ms-btn-primary">Thêm mới</a-button>
       </a-col>
     </a-row>
     <a-row class="mt-4">

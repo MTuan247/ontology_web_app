@@ -37,6 +37,7 @@ export default {
 .content {
   height: 0px;
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>

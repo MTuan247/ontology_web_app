@@ -1,13 +1,14 @@
-.btn {
+.ms-btn {
   border-radius: 3px;
   display: flex;
   align-items: center;
   border: none;
 }
-.btn-primary {
+.ms-btn-primary {
   background-color: #198754;
   color: #ffffff;
 }
-.btn-primary:hover {
+.ms-btn-primary:hover,  .ms-btn-primary:focus {
   background-color: #157347;
+  color: #ffffff;
 }

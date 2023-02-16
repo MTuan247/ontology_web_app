@@ -1,10 +1,10 @@
 <template>
   <a-row :gutter="[16, 16]">
     <a-col
-      ><a-input v-model:value="keyword"  style="width: 250px" placeholder="Nhập từ khóa để tìm kiếm điện thoại..."
+      ><a-input v-model:value="keyword"  style="width: 300px" placeholder="Nhập từ khóa để tìm kiếm điện thoại..."
     /></a-col>
     <a-col>
-      <a-button @click="search" class="btn btn-primary">Tìm kiếm</a-button>
+      <a-button @click="search" class="ms-btn ms-btn-primary">Tìm kiếm</a-button>
     </a-col>
   </a-row>
   <a-row :gutter="[16, 16]" style="align-items: center; margin-left: 20px;">
