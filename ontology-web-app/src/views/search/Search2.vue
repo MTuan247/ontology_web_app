@@ -4,14 +4,10 @@
       <SearchTemplate />
       <div style="flex: 1;"></div>
     </a-row>
-    <a-row class="mt-8">
-      Kết quả tìm kiếm theo liên kết: 
-      <div class="keyword ml-2">{{ searchKey }}</div>
-      <div class="btn-icon ml-2" v-if="searchKey" @click="loadData()"><CloseCircleTwoTone /></div>
-    </a-row>
 
-    <a-row class="mt-8" :gutter="[24,24]">
-      <a-col :span="6" v-for="phone in data" :key="phone.phone.value" @click="navigateDetailRoute(phone.phone.value)">
+    <a-spin v-if="isLoading" tip="Loading..." size="large"/>
+    <a-row v-else class="mt-8" :gutter="[60,48]">
+      <a-col :span="4" v-for="phone in data" :key="phone.phone.value" @click="navigateDetailRoute(phone.label.value)">
         <a-card hoverable style="width: 100%">
           <template #cover>
             <img alt="example" :src="phone.imgUri.value" />
@@ -32,9 +28,7 @@ import phoneApi from '@/js/api/phone/PhoneApi.js';
 import { ref } from '@vue/reactivity';
 import { useRoute } from 'vue-router';
 import SearchTemplate from '@/components/Search.vue';
-import { CloseCircleTwoTone } from '@ant-design/icons-vue';
 import { router } from '@/plugins/router.js';
-import dataJson from './queryResults.json';
 
 const columns = [
   {
@@ -67,7 +61,6 @@ export default {
   name: 'SearchView',
   components: {
     SearchTemplate,
-    CloseCircleTwoTone,
 },
   setup() {
     const route = useRoute();
@@ -76,7 +69,7 @@ export default {
     const phonePriceFrom = ref(route.query.phonePriceFrom);
     const phonePriceTo = ref(route.query.phonePriceTo);
 
-    const data = ref(dataJson.results.bindings);
+    const data = ref([]);
     const isLoading = ref(true);
 
     const formatUri = (uri) => {
@@ -92,22 +85,94 @@ export default {
       )
     }
 
-    const buildQueryPhone = () => `PREFIX ex: <http://semweb.edu.vn/example#>
+    const buildQueryPhone = () => {
+      let ns = `PREFIX ex: <http://semweb.edu.vn/example#>
           PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-          SELECT DISTINCT ?phone ?label ?imgUri
-          WHERE {
-            ?phone rdfs:subClassOf ex:mobilePhone .
+          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>`,
+          whereClause = `?phone rdfs:subClassOf ex:mobilePhone .
             ?phone ex:label ?label .
-            ?phone ex:image ?imgUri .
-            
-            ?phone ?p ?o .
+            ?phone ex:image ?imgUri .`;
+
+      if(searchKey.value) {
+        let convertedSearchKey = searchKey.value.replace(/\W/g, '');
+        whereClause += `?phone ?p ?o .
             BIND(REPLACE(STR(?phone), "\\\\W", "", "i") AS ?s2)
             BIND(REPLACE(STR(?o), "\\\\W", "", "i") AS ?o2)
-            FILTER (regex(str(?o2), "${searchKey.value.replace(/\W/g, '')}", "i") || regex(str(?s2), "${searchKey.value.replace(/\W/g, '')}", "i"))
+            FILTER (regex(str(?o2), "${convertedSearchKey}", "i") || regex(str(?s2), "${convertedSearchKey}", "i"))`;
+        // return `PREFIX ex: <http://semweb.edu.vn/example#>
+        //   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        //   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+        //   SELECT DISTINCT ?phone ?label ?imgUri
+        //   WHERE {
+        //     ?phone rdfs:subClassOf ex:mobilePhone .
+        //     ?phone ex:label ?label .
+        //     ?phone ex:image ?imgUri .
+            
+        //     ?phone ?p ?o .
+        //     BIND(REPLACE(STR(?phone), "\\\\W", "", "i") AS ?s2)
+        //     BIND(REPLACE(STR(?o), "\\\\W", "", "i") AS ?o2)
+        //     FILTER (regex(str(?o2), "${searchKey.value.replace(/\W/g, '')}", "i") || regex(str(?s2), "${searchKey.value.replace(/\W/g, '')}", "i"))
+        //   } 
+        //   ORDER BY ASC(?label)`
+        } else {
+          // return `PREFIX ex: <http://semweb.edu.vn/example#>
+          // PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+          // PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+          // SELECT DISTINCT ?phone ?label ?imgUri
+          // WHERE {
+          //   ?phone rdfs:subClassOf ex:mobilePhone .
+          //   ?phone ex:label ?label .
+          //   ?phone ex:image ?imgUri .
+          // } 
+          // ORDER BY ASC(?label)`
+        }
+
+        if(phoneType.value) {
+          whereClause += `
+            ?phone ex:manufacturer ex:${phoneType.value}
+          `
+        }
+
+        return `${ns}
+        SELECT DISTINCT ?phone ?label ?imgUri
+          WHERE {
+            ${whereClause}
           } 
-          ORDER BY ASC(?label)`
+          ORDER BY ASC(?label)`; 
+    }
+    
+    const buildQueryJsonLD = () => {
+      let ns = `PREFIX ex: <http://semweb.edu.vn/example#>
+          PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>`,
+          whereClause = `
+          ?s rdfs:subClassOf ex:mobilePhone .
+          ?s ?p ?o .
+          ?s ?p1 ?o1 .
+          filter(?p = ex:label || ?p = ex:image || ?p = rdfs:subClassOf)`;
+
+      if(searchKey.value) {
+        let convertedSearchKey = searchKey.value.replace(/\W/g, '');
+        whereClause += `
+            BIND(REPLACE(STR(?s), "\\\\W", "", "i") AS ?s2)
+            BIND(REPLACE(STR(?o1), "\\\\W", "", "i") AS ?o2)
+            FILTER (regex(str(?o2), "${convertedSearchKey}", "i") || regex(str(?s2), "${convertedSearchKey}", "i"))`;
+       
+        } 
+        if(phoneType.value) {
+          whereClause += `
+            ?s ex:manufacturer ex:${phoneType.value}
+          `
+        }
+
+        return `${ns}
+        construct {?s ?p ?o}
+        WHERE {
+          ${whereClause}
+        }`; 
+    }
 
     const loadData = async (currentURI) => {
       isLoading.value = true;
@@ -119,6 +184,7 @@ export default {
           query: currentURI ? formatUri(currentURI) : buildQueryPhone(),
         });
         data.value = res.data.results.bindings;
+        embedJsonLD();
         searchKey.value = currentURI?.split("#")[1];
       } catch (error) {
         console.log(error);
@@ -127,28 +193,34 @@ export default {
       isLoading.value = false
     };
 
+    const embedJsonLD = async () => {
+      try {
+        const res = await phoneApi.getJsonLD({
+          query: buildQueryJsonLD(),
+        });
+
+          let script = document.head.querySelector("script[type='application/ld+json']");
+          if(script) {
+            script.textContent = JSON.stringify(res.data, null, 2);
+          } else {
+            const newScript = document.createElement('script');
+            newScript.setAttribute('type', 'application/ld+json');
+            newScript.textContent = JSON.stringify(res.data, null, 2);
+            document.head.appendChild(newScript);
+          }
+          
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     onBeforeMount(async () => {
-    //   const script = document.createElement('script');
-    //   script.setAttribute('type', 'application/ld+json');
-    //   script.textContent = `{
-    //   "@context": "https://schema.org/",
-    //   "@type": "Recipe",
-    //   "name": "Party Coffee Cake",
-    //   "author": {
-    //     "@type": "Person",
-    //     "name": "Mary Stone"
-    //   },
-    //   "datePublished": "2018-03-10",
-    //   "description": "This coffee cake is awesome and perfect for parties.",
-    //   "prepTime": "PT20M"
-    // }`;
-    //   document.head.appendChild(script);
       loadData();
     });
 
-    const navigateDetailRoute = (url) => {
-      router.push({ path: '/detail', query: {
-        url,
+    const navigateDetailRoute = (label) => {
+       router.push({ path: '/detail', query: {
+        phone: label
       }})
     }
     
@@ -198,5 +270,15 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+.ant-card-body {
+  padding: 16px 4px;
+  display: flex;
+  justify-content: center;
+}
+
+.ant-card-meta-title {
+  font-size: 13px;
 }
 </style>

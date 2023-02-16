@@ -9,30 +9,14 @@
         </a-row>
       </a-col>
       <a-col :span="12">
-        <img :src="data.imgUri.value" style="width: 100%; max-width: 400px;"/>
+        <img :src="myPhoneData.imgUri?.value" style="width: 100%; max-width: 200px;"/>
+        <div class="txt-phone-label">{{ route.query.phone }}</div>
       </a-col>
       <a-col :span="12">
-        <a-row justify="space-between">
-          <a-col style="font-weight: bold">Title</a-col>
-          <a-col>{{ data.label.value }}</a-col>
-          <a-divider />
-        </a-row>
-
-        <a-row justify="space-between">
-          <a-col style="font-weight: bold">Price</a-col>
-          <a-col>aaaaaa</a-col>
-          <a-divider />
-        </a-row>
-
-        <a-row justify="space-between">
-          <a-col style="font-weight: bold">Title</a-col>
-          <a-col>aaaaaa</a-col>
-          <a-divider />
-        </a-row>
-
-        <a-row justify="space-between">
-          <a-col style="font-weight: bold">Title</a-col>
-          <a-col>aaaaaa</a-col>
+        <a-row justify="space-between" v-for="item in data" :key="item.pLabel.value">
+          <a-col style="font-weight: bold">{{ item.pLabel.value }}</a-col>
+          <a-col v-if="item.o" @click="navigateSearch(item.value.value)" class="link">{{ item.value.value }}</a-col>
+          <a-col v-else>{{ item.value.value }}</a-col>
           <a-divider />
         </a-row>
       </a-col>
@@ -46,15 +30,19 @@ import phoneApi from '@/js/api/phone/PhoneApi.js';
 import { ref } from '@vue/reactivity';
 import { useRoute } from 'vue-router';
 import { router } from '@/plugins/router.js';
-import dataJson from '@/views/search/queryResults.json';
 import BackIcon from '@/assets/back.svg'
 
-const queryMobile = `PREFIX ex: <http://semweb.edu.vn/example#>
+const buildQueryPhoneByLabel = (label) => `PREFIX ex: <http://semweb.edu.vn/example#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-select *
-where {?s rdfs:subClassOf ex:mobilePhone}`
+select ?s ?imgUri
+where {
+  ?s rdfs:subClassOf ex:mobilePhone.
+  ?s ex:label ?label .
+  ?s ex:image ?imgUri .
+  filter( ?label = "${label}")
+}`;
 
 export default {
   name: 'DetailComponent',
@@ -62,27 +50,82 @@ export default {
 },
   setup() {
     const route = useRoute();
-    const url = ref(route.query.url);
-
-    const data = ref(dataJson.results.bindings[0]);
+    const myPhoneData = ref({});
+    const data = ref([]);
     const isLoading = ref(true);
 
-    const buildQueryPhone = () => `PREFIX ex: <http://semweb.edu.vn/example#>
+    const buildQueryPhone = (phoneUri) => `PREFIX ex: <http://semweb.edu.vn/example#>
           PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
           PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-          ${{ url }}
-          `
+          SELECT ?pLabel ?value ?o WHERE
+          { 
+          {
+              SELECT ?pLabel ?value ?o WHERE 
+              {
+                ?phone rdfs:subClassOf ex:mobilePhone .
+                ?phone ?p ?o .
+                ?p ex:label ?pLabel .
+                ?o ex:label ?value .
+                filter (?phone = <${phoneUri}> && isIRI(?o)) .
+              }
+          }
+          UNION
+          {
+              SELECT ?pLabel (group_concat(?o;separator=", ") as ?value) WHERE 
+              {
+                ?phone rdfs:subClassOf ex:mobilePhone .
+                ?phone ?p ?o .
+                ?p ex:label ?pLabel .
+                filter (?phone = <${phoneUri}> && !isIRI(?o)) .
+              } group by ?pLabel
+          }
+          }
+          
+    `;
+
+    const buildQueryJsonLD = (phoneUri) => {
+      return `PREFIX ex: <http://semweb.edu.vn/example#>
+          PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+          PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+          construct  {?s ?p ?o}
+          WHERE {
+            ?s rdfs:subClassOf ex:mobilePhone .
+            ?s ?p ?o .
+            filter (?s = <${phoneUri}>)
+          }
+          `;
+    }
+
+    const embedJsonLD = async (phoneUri) => {
+      try {
+        const res = await phoneApi.getJsonLD({
+          query: buildQueryJsonLD(phoneUri),
+        });
+
+          let script = document.head.querySelector("script[type='application/ld+json']");
+          if(script) {
+            script.textContent = JSON.stringify(res.data, null, 2);
+          } else {
+            const newScript = document.createElement('script');
+            newScript.setAttribute('type', 'application/ld+json');
+            newScript.textContent = JSON.stringify(res.data, null, 2);
+            document.head.appendChild(newScript);
+          }
+          
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     const loadData = async () => {
       isLoading.value = true;
-      const formData = new FormData();
-      formData.append('query', queryMobile);
 
       try {
         const res = await phoneApi.searchPhone({
-          query: buildQueryPhone(),
+          query: buildQueryPhone(myPhoneData.value.s.value),
         });
-        data.value = res;
+        data.value = res.data.results.bindings;
+        embedJsonLD(myPhoneData.value.s.value);
       } catch (error) {
         console.log(error);
       }
@@ -91,23 +134,24 @@ export default {
     };
 
     onBeforeMount(async () => {
-    //   const script = document.createElement('script');
-    //   script.setAttribute('type', 'application/ld+json');
-    //   script.textContent = `{
-    //   "@context": "https://schema.org/",
-    //   "@type": "Recipe",
-    //   "name": "Party Coffee Cake",
-    //   "author": {
-    //     "@type": "Person",
-    //     "name": "Mary Stone"
-    //   },
-    //   "datePublished": "2018-03-10",
-    //   "description": "This coffee cake is awesome and perfect for parties.",
-    //   "prepTime": "PT20M"
-    // }`;
-    //   document.head.appendChild(script);
+      await getPhone();
       loadData();
     });
+
+    const getPhone = async () => {
+      isLoading.value = true;
+      try {
+        const res = await phoneApi.searchPhone({
+          query: buildQueryPhoneByLabel(route.query.phone),
+        });
+        myPhoneData.value = res.data.results.bindings[0];
+        console.log(myPhoneData.value);
+      } catch (error) {
+        console.log(error);
+      }
+
+      isLoading.value = false
+    }
 
     const navigateSearch = (keyword) => {
       router.push({ path: '/', query: {
@@ -123,6 +167,8 @@ export default {
     return {
       navigateSearch,
       data,
+      route,
+      myPhoneData,
       BackIcon,
       navigateBack,
     };
@@ -136,5 +182,19 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+.txt-phone-label {
+  margin-top: 20px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    max-width: 200px;
+    font-weight: 700;
+}
+.link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>

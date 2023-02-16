@@ -20,6 +20,20 @@ class PhoneApi extends BaseAPI {
     return res;
   }
 
+  async getJsonLD(param) {
+    const res = await axios({
+      method: 'post',
+      url: this.getUrl() + '/query',
+      data: param,
+      headers: {
+        'Accept': 'application/ld+json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    });
+
+    return res;
+  }
+
   async insertPhone(param) {
     const res = await axios({
       method: 'post',
